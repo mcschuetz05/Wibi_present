@@ -7,17 +7,15 @@ st.set_page_config(
     page_icon="💎"
 )
 
-st.title(" Happy Birthday, Wibi ❤️")
-st.write("💎 Let's play CARAT, SCOUPS, HOSHI! 🐯")
+st.title("💎 CARAT, SCOUPS, HOSHI! 🐯")
 
 st.markdown("""
 ### Rules
 
-- Carats can run faster than Scoups
-- But Carats are drawn into Hoshi's tiger cult 🐯
-- And Scoups is the leader, so Hoshi must omit  
-  *(if he ever does... 👀)*
-- First to win **3 rounds** is the winner! 🥳
+- 💎 Carat beats 🍒 Scoups
+- 🍒 Scoups beats 🐯 Hoshi
+- 🐯 Hoshi beats 💎 Carat
+- First to win **3 rounds** wins the game!
 """)
 
 
@@ -31,7 +29,7 @@ wins_against = {
 
 
 # -------------------------
-# GAME STATE
+# SESSION STATE
 # -------------------------
 
 if "won" not in st.session_state:
@@ -40,31 +38,68 @@ if "won" not in st.session_state:
 if "lost" not in st.session_state:
     st.session_state.lost = 0
 
-if "phase" not in st.session_state:
-    st.session_state.phase = "game"
-
 if "last_result" not in st.session_state:
     st.session_state.last_result = ""
+
+if "game_over" not in st.session_state:
+    st.session_state.game_over = False
+
+
+# -------------------------
+# SCORE
+# -------------------------
+
+st.subheader(
+    f"YOU  {st.session_state.won} : {st.session_state.lost}  COMPUTER"
+)
+
+st.write("Your progress:")
+
+st.progress(st.session_state.won / 3)
+
+st.caption(f"{st.session_state.won} / 3 wins")
 
 
 # -------------------------
 # GAME
 # -------------------------
 
-if st.session_state.phase == "game":
+if not st.session_state.game_over:
 
-    st.subheader(
-        f"Score: {st.session_state.won} - {st.session_state.lost}"
-    )
+    st.write("### Make your choice:")
 
-    choice = st.radio(
-        "Make your choice:",
-        possibilities,
-        format_func=str.capitalize,
-        horizontal=True
-    )
+    col1, col2, col3 = st.columns(3)
 
-    if st.button("Play! 🎮"):
+    with col1:
+        carat = st.button(
+            "💎 CARAT",
+            use_container_width=True
+        )
+
+    with col2:
+        scoups = st.button(
+            "🍒 SCOUPS",
+            use_container_width=True
+        )
+
+    with col3:
+        hoshi = st.button(
+            "🐯 HOSHI",
+            use_container_width=True
+        )
+
+    choice = None
+
+    if carat:
+        choice = "carat"
+
+    elif scoups:
+        choice = "scoups"
+
+    elif hoshi:
+        choice = "hoshi"
+
+    if choice:
 
         fate = random.choice(possibilities)
 
@@ -94,84 +129,106 @@ if st.session_state.phase == "game":
             st.session_state.won >= 3
             or st.session_state.lost >= 3
         ):
-            st.session_state.phase = "test"
+            st.session_state.game_over = True
 
         st.rerun()
 
-    if st.session_state.last_result:
-        st.info(st.session_state.last_result)
+
+# -------------------------
+# LAST ROUND RESULT
+# -------------------------
+
+if st.session_state.last_result:
+
+    if "you won" in st.session_state.last_result:
+
+        st.success(
+            st.session_state.last_result
+        )
+
+    elif "you lost" in st.session_state.last_result:
+
+        st.error(
+            st.session_state.last_result
+        )
+
+    else:
+
+        st.warning(
+            st.session_state.last_result
+        )
 
 
 # -------------------------
-# CARAT TEST
+# GAME OVER
 # -------------------------
 
-elif st.session_state.phase == "test":
+if st.session_state.game_over:
 
-    st.subheader(
-        f"Final score: {st.session_state.won} - {st.session_state.lost}"
-    )
+    if st.session_state.won == 3:
 
-    st.write("Nice game! 😌")
+        st.balloons()
+
+        st.success(
+            "YOU WON THE GAME! 💎🎉"
+        )
+
+    else:
+
+        st.error(
+            "You lost the game 😭"
+        )
+
+    st.write("## Now SAY THE NAME 👀")
 
     test = st.text_input(
-        "Now SAY THE NAME:"
+        "Who are we talking about?"
     )
 
-    if st.button("Submit answer 💎"):
+    if st.button("Submit 💎"):
 
         if test.upper().startswith("SEVENTEEN"):
 
-            st.session_state.phase = "success"
-            st.rerun()
+            st.success(
+                "CORRECT! 💎"
+            )
 
-        else:
+            st.markdown("""
+### SEVENTEEEEEEEEEEEEEN!!! 🎉
 
-            st.session_state.phase = "failed"
-            st.rerun()
-
-
-# -------------------------
-# SUCCESS
-# -------------------------
-
-elif st.session_state.phase == "success":
-
-    st.success("CORRECT! 💎")
-
-    st.write("""
-Here we go:
-
-seungcheol! jeonghan! jisoo! junhui! soonyoung! wonwoo!
-jihun! myungho! mingyu! seokmin! seungkwan! hansol! chan!
-hansol! seungkwan! seokmin! mingyu! myungho!
-
-### SEVENTEEEEEEEEEEEEEN!!! 🎉💎
+seungcheol!  
+jeonghan!  
+jisoo!  
+junhui!  
+soonyoung!  
+wonwoo!  
+jihun!  
+myungho!  
+mingyu!  
+seokmin!  
+seungkwan!  
+hansol!  
+chan!
 """)
 
-    if st.button("Play again 🔄"):
+        elif test:
 
-        st.session_state.won = 0
-        st.session_state.lost = 0
-        st.session_state.last_result = ""
-        st.session_state.phase = "game"
-
-        st.rerun()
+            st.error(
+                "Are you even a Carat...? 🤨"
+            )
 
 
 # -------------------------
-# WRONG ANSWER
+# RESTART
 # -------------------------
 
-elif st.session_state.phase == "failed":
+st.divider()
 
-    st.error("Are you even a Carat... ? 🤨")
+if st.button("🔄 Restart Game"):
 
-    if st.button("Redeem yourself 😭"):
+    st.session_state.won = 0
+    st.session_state.lost = 0
+    st.session_state.last_result = ""
+    st.session_state.game_over = False
 
-        st.session_state.won = 0
-        st.session_state.lost = 0
-        st.session_state.last_result = ""
-        st.session_state.phase = "game"
-
-        st.rerun()
+    st.rerun()
