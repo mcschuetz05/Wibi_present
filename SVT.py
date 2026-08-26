@@ -7,15 +7,17 @@ st.set_page_config(
     page_icon="💎"
 )
 
-st.title("💎 CARAT, SCOUPS, HOSHI! 🐯")
+st.title(" Happy Birthday, Wibi ❤️")
+st.write("💎 Let's play CARAT, SCOUPS, HOSHI! 🐯")
 
 st.markdown("""
 ### Rules
 
-- 💎 Carat beats 🍒 Scoups
-- 🍒 Scoups beats 🐯 Hoshi
-- 🐯 Hoshi beats 💎 Carat
-- First to win **3 rounds** wins the game!
+- Carats can run faster than Scoups
+- But Carats are drawn into Hoshi's tiger cult 🐯
+- And Scoups is the leader, so Hoshi must omit  
+  *(if he ever does... 👀)*
+- First to win **3 rounds** is the winner! 🥳
 """)
 
 
@@ -50,7 +52,7 @@ if "game_over" not in st.session_state:
 # -------------------------
 
 st.subheader(
-    f"YOU  {st.session_state.won} : {st.session_state.lost}  COMPUTER"
+    f"YOU  {st.session_state.won} : {st.session_state.lost}  Buck-Tschakkalakka"
 )
 
 st.write("Your progress:")
@@ -182,19 +184,20 @@ if st.session_state.game_over:
     st.write("## Now SAY THE NAME 👀")
 
     test = st.text_input(
-        "Who are we talking about?"
+        "SAY THE NAME!"
     )
 
     if st.button("Submit 💎"):
 
         if test.upper().startswith("SEVENTEEN"):
 
+            st.balloons()
+
             st.success(
                 "CORRECT! 💎"
             )
 
             st.markdown("""
-### SEVENTEEEEEEEEEEEEEN!!! 🎉
 
 seungcheol!  
 jeonghan!  
@@ -209,6 +212,8 @@ seokmin!
 seungkwan!  
 hansol!  
 chan!
+
+### SEVENTEEEEEEEEEEEEEN!!! 🎉
 """)
 
         elif test:
